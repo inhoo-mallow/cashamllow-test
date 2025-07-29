@@ -1,0 +1,27 @@
+{
+"applinks": {
+"details": [
+{
+"appIDs": [
+"1232912026.com.cashmallow.client"
+],
+"components": [
+{
+"/": "/app/*",
+"comment": "Matches any URL with a path that starts with /app/"
+},
+{
+"/": "/*",
+"exclude": true,
+"comment": "Exclude all other paths to prevent conflicts with existing web routes"
+}
+]
+}
+]
+},
+"webcredentials": {
+"apps": [
+"1232912026.com.cashmallow.client"
+]
+}
+}
