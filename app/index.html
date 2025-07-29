@@ -91,14 +91,16 @@
       // 앱 열기 시도
       function attemptOpenApp() {
         const path = window.location.pathname;
-        const deepLink = `inhoo-mallow.github.io:${path}`;
-
+        
         if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+          // iOS에서는 커스텀 스킴 사용
+          const deepLink = `inhoo-mallow-github-io://${path.substring(1)}`; // /app/test -> inhoo-mallow-github-io://app/test
           window.location.href = deepLink;
         } else if (/Android/.test(navigator.userAgent)) {
           const intentUrl = `intent:${path}#Intent;scheme=inhoo-mallow.github.io;end`;
           window.location.href = intentUrl;
         } else {
+          const deepLink = `inhoo-mallow.github.io:${path}`;
           window.location.href = deepLink;
         }
       }
