@@ -2,7 +2,7 @@
   "applinks": {
     "details": [
       {
-        "appIDs": ["1232912026.com.cashmallow.client"],
+        "appIDs": ["1232912026.com.cashamlloow.client"],
         "components": [
           {
             "/": "/app/*",
@@ -18,6 +18,6 @@
     ]
   },
   "webcredentials": {
-    "apps": ["1232912026.com.cashmallow.client"]
+    "apps": ["1232912026.com.cashamlloow.client"]
   }
 }

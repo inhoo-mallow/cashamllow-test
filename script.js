@@ -1,5 +1,5 @@
 // 커스텀 도메인 사용으로 BASE_PATH 제거
-const BASE_PATH = "/cashmallow-test/";
+const BASE_PATH = "/cashamlloow-test/";
 
 function showPage(pageId) {
   console.log("pageid!!", pageId);
