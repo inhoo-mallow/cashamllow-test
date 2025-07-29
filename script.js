@@ -16,11 +16,13 @@ function showPage(pageId) {
 function handleRoute() {
   const path = window.location.pathname;
   console.log("path!!", path);
+  console.log("BASE_PATH!!", BASE_PATH);
+  console.log("path === BASE_PATH:", path === BASE_PATH);
 
   if (
     path === BASE_PATH ||
     path === BASE_PATH + "index.html" ||
-    path === BASE_PATH.slice(0, -1)
+    path === ""
   ) {
     showPage("home");
   } else {

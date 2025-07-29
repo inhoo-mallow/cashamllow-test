@@ -1,23 +1,13 @@
-{
-  "applinks": {
-    "details": [
-      {
-        "appIDs": ["1232912026.com.cashmallow.client"],
-        "components": [
-          {
-            "/": "/app/*",
-            "comment": "Matches any URL with a path that starts with /app/"
-          },
-          {
-            "/": "/*",
-            "exclude": true,
-            "comment": "Exclude all other paths to prevent conflicts with existing web routes"
-          }
-        ]
-      }
-    ]
-  },
-  "webcredentials": {
-    "apps": ["1232912026.com.cashmallow.client"]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.cashmallow.client.traveler",
+      "sha256_cert_fingerprints": [
+        "5B:86:37:78:64:0C:49:18:42:47:E8:91:B2:55:BD:73:A7:1E:AA:F3:DB:E3:72:DE:93:6E:68:52:95:7A:B1:E2",
+        "ED:50:7B:78:F9:08:F5:09:2C:C5:54:E4:6F:9C:EE:CC:E2:30:8E:AF:FF:DF:99:B9:FC:13:B0:52:1D:02:2D:07"
+      ]
+    }
   }
-}
+]
