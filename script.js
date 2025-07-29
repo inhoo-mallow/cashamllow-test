@@ -1,5 +1,5 @@
 // 커스텀 도메인 사용으로 BASE_PATH 제거
-const BASE_PATH = "";
+const BASE_PATH = "/cashmallow-test/";
 
 function showPage(pageId) {
   console.log("pageid!!", pageId);
@@ -18,9 +18,8 @@ function handleRoute() {
   console.log("path!!", path);
 
   if (
-    path === "/" ||
-    path === BASE_PATH + "/" ||
-    path === BASE_PATH + "/index.html" ||
+    path === BASE_PATH ||
+    path === BASE_PATH + "index.html" ||
     path === BASE_PATH
   ) {
     showPage("home");
