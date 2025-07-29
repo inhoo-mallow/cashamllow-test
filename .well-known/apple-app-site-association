@@ -3,7 +3,7 @@
 "details": [
 {
 "appIDs": [
-"1232912026.com.cashamlloow.client"
+"1232912026.com.cashamllow.client"
 ],
 "components": [
 {
@@ -21,7 +21,7 @@
 },
 "webcredentials": {
 "apps": [
-"1232912026.com.cashamlloow.client"
+"1232912026.com.cashamllow.client"
 ]
 }
 }
