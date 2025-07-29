@@ -9,7 +9,7 @@ function showPage(pageId) {
   document.getElementById(pageId).classList.add("active");
 
   if (pageId === "home") {
-    history.pushState(null, "", BASE_PATH + "/");
+    history.pushState(null, "", BASE_PATH);
   }
 }
 
