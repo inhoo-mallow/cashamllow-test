@@ -20,7 +20,7 @@ function handleRoute() {
   if (
     path === BASE_PATH ||
     path === BASE_PATH + "index.html" ||
-    path === BASE_PATH
+    path === BASE_PATH.slice(0, -1) // /cashamllow-test (슬래시 없는 버전)
   ) {
     showPage("home");
   } else {
