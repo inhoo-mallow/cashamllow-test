@@ -1,0 +1,55 @@
+# my-site/index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Site</title>
+    <style>
+      .page { display: none; }
+      .page.active { display: block; }
+      .not-found {
+        text-align: center;
+        padding: 50px;
+        font-family: Arial, sans-serif;
+      }
+      .not-found h1 {
+        font-size: 6rem;
+        margin: 0;
+        color: #ff6b6b;
+      }
+      .not-found h2 {
+        font-size: 2rem;
+        margin: 20px 0;
+        color: #333;
+      }
+      .not-found p {
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 30px;
+      }
+      .not-found a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .not-found a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="home" class="page active">
+      <h1>Welcome to My Site</h1>
+      <p>This is the home page.</p>
+    </div>
+    
+    <div id="404" class="page not-found">
+      <h1>404</h1>
+      <h2>Page Not Found</h2>
+      <p>The page you are looking for doesn't exist.</p>
+      <a href="/" onclick="showPage('home'); return false;">Go back to home</a>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
