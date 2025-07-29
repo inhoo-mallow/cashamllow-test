@@ -148,22 +148,22 @@
           openAppBtn.textContent = "외부 브라우저로 열기";
           openAppBtn.onclick = function () {
             const currentUrl = window.location.href;
-            
-            // Android에서 Chrome으로 열기 시도
+
+            // Android에서 Intent로 브라우저 선택 다이얼로그 열기
             if (/Android/.test(navigator.userAgent)) {
-              const chromeUrl = `googlechrome://navigate?url=${encodeURIComponent(currentUrl)}`;
-              window.location.href = chromeUrl;
-              
-              // Chrome이 없을 경우 2초 후 일반 브라우저로 열기
-              setTimeout(() => {
-                window.open(currentUrl, "_blank");
-              }, 2000);
+              const intentUrl = `intent://${currentUrl.replace(
+                /^https?:\/\//,
+                ""
+              )}#Intent;scheme=https;action=android.intent.action.VIEW;end`;
+              window.location.href = intentUrl;
             }
-            // iOS에서 Safari로 열기 시도  
+            // iOS에서 Safari로 열기 시도
             else if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-              const safariUrl = `x-web-search://?${encodeURIComponent(currentUrl)}`;
+              const safariUrl = `x-web-search://?${encodeURIComponent(
+                currentUrl
+              )}`;
               window.location.href = safariUrl;
-              
+
               // Safari 스킴이 안되면 일반 브라우저로 열기
               setTimeout(() => {
                 window.open(currentUrl, "_blank");
@@ -173,10 +173,10 @@
             else {
               window.open(currentUrl, "_blank");
             }
-            
+
             setTimeout(() => {
               storeLinks.style.display = "block";
-            }, 3000);
+            }, 2000);
           };
         } else {
           openAppBtn.onclick = function () {
