@@ -19,11 +19,7 @@ function handleRoute() {
   console.log("BASE_PATH!!", BASE_PATH);
   console.log("path === BASE_PATH:", path === BASE_PATH);
 
-  if (
-    path === BASE_PATH ||
-    path === BASE_PATH + "index.html" ||
-    path === ""
-  ) {
+  if (path === BASE_PATH || path === BASE_PATH + "index.html" || path === "") {
     showPage("home");
   } else {
     showPage("404");
@@ -39,8 +35,15 @@ window.addEventListener("DOMContentLoaded", function () {
       e.target.tagName === "A" &&
       e.target.getAttribute("href").startsWith("/")
     ) {
+      const href = e.target.getAttribute("href");
+      
+      // /app/* 경로는 App Links로 처리하도록 SPA 라우팅에서 제외
+      if (href.startsWith("/app")) {
+        return; // 기본 링크 동작 허용
+      }
+      
       e.preventDefault();
-      const path = e.target.getAttribute("href");
+      const path = href;
       history.pushState(null, "", path);
       handleRoute();
     }
