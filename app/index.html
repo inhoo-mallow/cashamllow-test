@@ -1,9 +1,3 @@
----
-permalink: /app/
-redirect_from:
-  - /app/*
----
-
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -97,15 +91,12 @@ redirect_from:
       // 앱 열기 시도
       function attemptOpenApp() {
         const path = window.location.pathname;
-        const deepLink = `inhoo-mallow.github.io${path}`;
+        const deepLink = `inhoo-mallow.github.io:${path}`;
 
         if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
           window.location.href = deepLink;
         } else if (/Android/.test(navigator.userAgent)) {
-          const intentUrl = `intent://${deepLink.replace(
-            "inhoo-mallow.github.io/",
-            ""
-          )}#Intent;scheme=inhoo-mallow.github.io;end`;
+          const intentUrl = `intent:${path}#Intent;scheme=inhoo-mallow.github.io;end`;
           window.location.href = intentUrl;
         } else {
           window.location.href = deepLink;
@@ -156,10 +147,36 @@ redirect_from:
 
           openAppBtn.textContent = "외부 브라우저로 열기";
           openAppBtn.onclick = function () {
-            window.open(window.location.href, "_blank");
+            const currentUrl = window.location.href;
+            
+            // Android에서 Chrome으로 열기 시도
+            if (/Android/.test(navigator.userAgent)) {
+              const chromeUrl = `googlechrome://navigate?url=${encodeURIComponent(currentUrl)}`;
+              window.location.href = chromeUrl;
+              
+              // Chrome이 없을 경우 2초 후 일반 브라우저로 열기
+              setTimeout(() => {
+                window.open(currentUrl, "_blank");
+              }, 2000);
+            }
+            // iOS에서 Safari로 열기 시도  
+            else if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+              const safariUrl = `x-web-search://?${encodeURIComponent(currentUrl)}`;
+              window.location.href = safariUrl;
+              
+              // Safari 스킴이 안되면 일반 브라우저로 열기
+              setTimeout(() => {
+                window.open(currentUrl, "_blank");
+              }, 2000);
+            }
+            // 기타 플랫폼
+            else {
+              window.open(currentUrl, "_blank");
+            }
+            
             setTimeout(() => {
               storeLinks.style.display = "block";
-            }, 2000);
+            }, 3000);
           };
         } else {
           openAppBtn.onclick = function () {
