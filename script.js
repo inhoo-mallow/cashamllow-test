@@ -21,6 +21,10 @@ function handleRoute() {
 
   if (path === BASE_PATH || path === BASE_PATH + "index.html" || path === "") {
     showPage("home");
+  } else if (path.startsWith("/app")) {
+    // /app 경로는 실제 파일로 리다이렉트
+    window.location.href = path;
+    return;
   } else {
     showPage("404");
   }
@@ -28,6 +32,7 @@ function handleRoute() {
 
 window.addEventListener("popstate", handleRoute);
 window.addEventListener("load", handleRoute);
+
 
 window.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", function (e) {
@@ -37,9 +42,9 @@ window.addEventListener("DOMContentLoaded", function () {
     ) {
       const href = e.target.getAttribute("href");
       
-      // /app/* 경로는 App Links로 처리하도록 SPA 라우팅에서 제외
+      // /app/* 경로는 실제 파일로 이동 (기본 링크 동작 허용)
       if (href.startsWith("/app")) {
-        return; // 기본 링크 동작 허용
+        return;
       }
       
       e.preventDefault();

@@ -1,0 +1,186 @@
+---
+permalink: /app/
+redirect_from:
+  - /app/*
+---
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>앱으로 이동 중...</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 50px;
+        background-color: #f5f5f5;
+      }
+      .message {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      .buttons {
+        margin-top: 20px;
+      }
+      .btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn:hover {
+        background-color: #0056b3;
+      }
+      .btn-secondary {
+        background-color: #6c757d;
+      }
+      .btn-secondary:hover {
+        background-color: #545b62;
+      }
+      .btn-success {
+        background-color: #28a745;
+      }
+      .btn-success:hover {
+        background-color: #218838;
+      }
+      .store-links {
+        margin-top: 15px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="message">
+      <h2 id="title">앱을 열고 있습니다...</h2>
+      <p id="description">잠시만 기다려주세요.</p>
+
+      <div class="buttons">
+        <button id="openAppBtn" class="btn">앱으로 열기</button>
+      </div>
+
+      <div id="storeLinks" class="store-links">
+        <a href="#" id="appStoreLink" class="btn btn-success">App Store</a>
+        <a href="#" id="playStoreLink" class="btn btn-success">Play Store</a>
+      </div>
+    </div>
+
+    <script>
+      // 인앱브라우저 감지 함수
+      function isInAppBrowser() {
+        const userAgent =
+          navigator.userAgent || navigator.vendor || window.opera;
+
+        if (userAgent.includes("KAKAOTALK")) return "kakaotalk";
+        if (userAgent.includes("Line")) return "line";
+        if (userAgent.includes("NAVER")) return "naver";
+        if (userAgent.includes("FBAN") || userAgent.includes("FBAV"))
+          return "facebook";
+        if (userAgent.includes("Instagram")) return "instagram";
+        if (userAgent.includes("wv") || userAgent.includes("WebView"))
+          return "webview";
+
+        return false;
+      }
+
+      // 앱 열기 시도
+      function attemptOpenApp() {
+        const path = window.location.pathname;
+        const deepLink = `inhoo-mallow.github.io${path}`;
+
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+          window.location.href = deepLink;
+        } else if (/Android/.test(navigator.userAgent)) {
+          const intentUrl = `intent://${deepLink.replace(
+            "inhoo-mallow.github.io/",
+            ""
+          )}#Intent;scheme=inhoo-mallow.github.io;end`;
+          window.location.href = intentUrl;
+        } else {
+          window.location.href = deepLink;
+        }
+      }
+
+      // 페이지 초기화
+      function initPage() {
+        const inAppBrowser = isInAppBrowser();
+        const title = document.getElementById("title");
+        const description = document.getElementById("description");
+        const openAppBtn = document.getElementById("openAppBtn");
+        const storeLinks = document.getElementById("storeLinks");
+        const appStoreLink = document.getElementById("appStoreLink");
+        const playStoreLink = document.getElementById("playStoreLink");
+
+        // 앱스토어 링크 설정 (실제 URL로 변경 필요)
+        appStoreLink.href = "https://apps.apple.com/app/your-app-id";
+        playStoreLink.href =
+          "https://play.google.com/store/apps/details?id=your.package.name";
+
+        if (inAppBrowser) {
+          let browserName = "";
+          switch (inAppBrowser) {
+            case "kakaotalk":
+              browserName = "카카오톡";
+              break;
+            case "line":
+              browserName = "라인";
+              break;
+            case "naver":
+              browserName = "네이버";
+              break;
+            case "facebook":
+              browserName = "페이스북";
+              break;
+            case "instagram":
+              browserName = "인스타그램";
+              break;
+            default:
+              browserName = "인앱";
+              break;
+          }
+
+          title.textContent = `${browserName} 브라우저에서는 앱을 직접 열 수 없습니다`;
+          description.innerHTML =
+            "아래 버튼을 눌러 외부 브라우저로 이동한 후 앱을 열어주세요.<br>또는 링크를 복사해서 Safari나 Chrome에서 열어주세요.";
+
+          openAppBtn.textContent = "외부 브라우저로 열기";
+          openAppBtn.onclick = function () {
+            window.open(window.location.href, "_blank");
+            setTimeout(() => {
+              storeLinks.style.display = "block";
+            }, 2000);
+          };
+        } else {
+          openAppBtn.onclick = function () {
+            attemptOpenApp();
+            setTimeout(() => {
+              storeLinks.style.display = "block";
+            }, 3000);
+          };
+
+          // 0.5초 후 자동으로 앱 열기 시도
+          setTimeout(() => {
+            attemptOpenApp();
+            setTimeout(() => {
+              storeLinks.style.display = "block";
+            }, 3000);
+          }, 500);
+        }
+      }
+
+      // 페이지 로드시 초기화
+      window.addEventListener("load", initPage);
+    </script>
+  </body>
+</html>

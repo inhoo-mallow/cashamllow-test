@@ -1,6 +1,9 @@
 include:
   - .well-known
 
+plugins:
+  - jekyll-redirect-from
+
 defaults:
   - scope:
       path: ".well-known/apple-app-site-association"
