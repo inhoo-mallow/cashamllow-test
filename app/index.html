@@ -66,9 +66,6 @@
     </div>
 
     <script>
-      // Store original URL before any modifications
-      const originalUrl = window.location.href;
-      
       // App configuration
       const config = {
         // Deep link URL scheme
@@ -139,13 +136,8 @@
 
           // Platform-specific deep linking
           if (isIOS) {
-            // Use original URL to avoid # corruption
-            // x-web-search format: x-web-search://?{encoded_url}
-            const safariUrl = `x-web-search://?${encodeURIComponent(originalUrl)}`;
-            
-            console.log('Original URL:', originalUrl);
-            console.log('Safari URL:', safariUrl);
-            
+            const currentUrl = window.location.href;
+            const safariUrl = `x-web-search://?${encodeURIComponent(currentUrl)}`;
             window.location.href = safariUrl;
           } else if (isAndroid) {
             // Use intent URL for better Android compatibility
