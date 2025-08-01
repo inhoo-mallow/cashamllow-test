@@ -93,9 +93,12 @@
         const path = window.location.pathname;
 
         if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-          const universalLinkDomain = "https://inhoo-mallow.github.io"; // Your universal link domain
+          const universalLinkDomain =
+            "https://inhoo-mallow-github-io-bhnd.vercel.app"; // Your universal link domain
           const universalLink = `${universalLinkDomain}${path}`;
-          const customSchemeLink = `inhoo-mallow-github-io://${path.substring(1)}`;
+          const customSchemeLink = `inhoo-mallow-github-io://${path.substring(
+            1
+          )}`;
 
           // Try to open universal link first
           window.location.href = universalLink;
@@ -106,16 +109,16 @@
           }, 1000); // Give 1 second for universal link to open
 
           // Clear the timer if the app opens (page visibility changes)
-          document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden') {
+          document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "hidden") {
               clearTimeout(appOpenTimer);
             }
           });
         } else if (/Android/.test(navigator.userAgent)) {
-          const intentUrl = `intent:${path}#Intent;scheme=inhoo-mallow.github.io;end`;
+          const intentUrl = `intent:${path}#Intent;scheme=inhoo-mallow-github-io-bhnd.vercel.app;end`;
           window.location.href = intentUrl;
         } else {
-          const deepLink = `inhoo-mallow.github.io:${path}`;
+          const deepLink = `inhoo-mallow-github-io-bhnd.vercel.app:${path}`;
           window.location.href = deepLink;
         }
       }
