@@ -1,77 +1,91 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>앱으로 이동 중...</title>
+    <title>Cashmallow App Redirect</title>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", ""); // TODO: Replace MEASUREMENT_ID with your actual GA4 measurement ID
+    </script>
     <style>
       body {
-        font-family: Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
         text-align: center;
-        padding: 50px;
-        background-color: #f5f5f5;
+        flex-direction: column;
+        padding: 0 20px;
       }
-      .message {
-        background: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        margin: 0 auto;
+      h1 {
+        margin-bottom: 10px;
       }
-      .buttons {
-        margin-top: 20px;
-      }
-      .btn {
-        background-color: #007bff;
+      .button {
+        background-color: #4285f4;
         color: white;
-        border: none;
         padding: 12px 24px;
-        font-size: 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-        margin: 5px;
+        border-radius: 4px;
         text-decoration: none;
+        margin: 10px 0;
         display: inline-block;
-      }
-      .btn:hover {
-        background-color: #0056b3;
-      }
-      .btn-secondary {
-        background-color: #6c757d;
-      }
-      .btn-secondary:hover {
-        background-color: #545b62;
-      }
-      .btn-success {
-        background-color: #28a745;
-      }
-      .btn-success:hover {
-        background-color: #218838;
+        font-weight: bold;
       }
       .store-links {
-        margin-top: 15px;
+        margin-top: 20px;
         display: none;
+      }
+      .store-links a {
+        margin: 0 10px;
+        display: inline-block;
       }
     </style>
   </head>
   <body>
-    <div class="message">
-      <h2 id="title">앱을 열고 있습니다...</h2>
-      <p id="description">잠시만 기다려주세요.</p>
-
-      <div class="buttons">
-        <button id="openAppBtn" class="btn">앱으로 열기</button>
-      </div>
-
+    <div class="container">
+      <h1 id="title">Cashmallow</h1>
+      <p id="description">Opening Cashmallow app...</p>
+      <a href="#" id="openAppBtn" class="button">Open App</a>
       <div id="storeLinks" class="store-links">
-        <a href="#" id="appStoreLink" class="btn btn-success">App Store</a>
-        <a href="#" id="playStoreLink" class="btn btn-success">Play Store</a>
+        <p>Can't open the app?</p>
+        <a href="#" id="appStoreLink">App Store</a>
+        <a href="#" id="playStoreLink">Google Play</a>
       </div>
     </div>
 
     <script>
-      // 인앱브라우저 감지 함수
+      // App configuration
+      const config = {
+        // Deep link URL scheme
+        deepLink: "cashmallow://",
+
+        // App store URLs
+        appStore:
+          "https://apps.apple.com/hk/app/cashmallow-%E6%B5%B7%E5%A4%96atm%E5%85%8D%E6%89%8B%E7%BA%8C%E8%B2%BB%E6%8F%90%E6%AC%BE/id1232912026",
+        playStore:
+          "https://play.google.com/store/apps/details?id=com.cashmallow.client.traveler&hl=en",
+
+        // Timeout in milliseconds before redirecting to app store
+        timeout: 2000,
+      };
+
+      // Detect platform
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      // In-app browser detection function
       function isInAppBrowser() {
         const userAgent =
           navigator.userAgent || navigator.vendor || window.opera;
@@ -88,135 +102,184 @@
         return false;
       }
 
-      // 앱 열기 시도
+      // Attempt to open the app with deep linking
       function attemptOpenApp() {
-        const path = window.location.pathname;
+        try {
+          // Track the redirect event in GA4
+          /*gtag('event', 'deeplink_redirect', {
+                    'app_name': 'Cashmallow',
+                    'platform': isAndroid ? 'Android' : (isIOS ? 'iOS' : 'Other')
+                });*/
 
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-          const universalLinkDomain =
-            "https://inhoo-mallow-github-io-bhnd.vercel.app"; // Your universal link domain
-          const universalLink = `${universalLinkDomain}${path}`;
-          const customSchemeLink = `inhoo-mallow-github-io://${path.substring(
-            1
-          )}`;
+          // Get any query parameters from the URL
+          const urlParams = new URLSearchParams(window.location.search);
+          let deepLinkUrl = config.deepLink;
+          const path = window.location.pathname;
 
-          // Try to open universal link first
-          window.location.href = universalLink;
-
-          // Fallback to custom scheme if universal link doesn't open the app
-          const appOpenTimer = setTimeout(() => {
-            window.location.href = customSchemeLink;
-          }, 1000); // Give 1 second for universal link to open
-
-          // Clear the timer if the app opens (page visibility changes)
-          document.addEventListener("visibilitychange", () => {
-            if (document.visibilityState === "hidden") {
-              clearTimeout(appOpenTimer);
-            }
-          });
-        } else if (/Android/.test(navigator.userAgent)) {
-          const intentUrl = `intent:${path}#Intent;scheme=inhoo-mallow-github-io-bhnd.vercel.app;end`;
-          window.location.href = intentUrl;
-        } else {
-          const deepLink = `inhoo-mallow-github-io-bhnd.vercel.app:${path}`;
-          window.location.href = deepLink;
-        }
-      }
-
-      // 페이지 초기화
-      function initPage() {
-        const inAppBrowser = isInAppBrowser();
-        const title = document.getElementById("title");
-        const description = document.getElementById("description");
-        const openAppBtn = document.getElementById("openAppBtn");
-        const storeLinks = document.getElementById("storeLinks");
-        const appStoreLink = document.getElementById("appStoreLink");
-        const playStoreLink = document.getElementById("playStoreLink");
-
-        // 앱스토어 링크 설정 (실제 URL로 변경 필요)
-        appStoreLink.href = "https://apps.apple.com/app/your-app-id";
-        playStoreLink.href =
-          "https://play.google.com/store/apps/details?id=your.package.name";
-
-        if (inAppBrowser) {
-          let browserName = "";
-          switch (inAppBrowser) {
-            case "kakaotalk":
-              browserName = "카카오톡";
-              break;
-            case "line":
-              browserName = "라인";
-              break;
-            case "naver":
-              browserName = "네이버";
-              break;
-            case "facebook":
-              browserName = "페이스북";
-              break;
-            case "instagram":
-              browserName = "인스타그램";
-              break;
-            default:
-              browserName = "인앱";
-              break;
+          // Add path to deep link if available
+          if (path && path !== "/" && path !== "/index.html") {
+            deepLinkUrl += path.substring(1); // Remove leading slash
           }
 
-          title.textContent = `${browserName} 브라우저에서는 앱을 직접 열 수 없습니다`;
-          description.innerHTML =
-            "아래 버튼을 눌러 외부 브라우저로 이동한 후 앱을 열어주세요.<br>또는 링크를 복사해서 Safari나 Chrome에서 열어주세요.";
+          // Add any query parameters to the deep link
+          for (const [key, value] of urlParams.entries()) {
+            // First parameter needs a ? instead of &
+            if (deepLinkUrl.indexOf("?") === -1) {
+              deepLinkUrl += "?";
+            } else {
+              deepLinkUrl += "&";
+            }
+            deepLinkUrl += `${key}=${value}`;
+          }
 
-          openAppBtn.textContent = "외부 브라우저로 열기";
-          openAppBtn.onclick = function () {
+          const now = Date.now();
+
+          // Platform-specific deep linking
+          if (isIOS) {
+            // Use x-web-search to open in Safari (for Universal Links)
             const currentUrl = window.location.href;
+            const safariUrl = `x-web-search://?${encodeURIComponent(currentUrl)}`;
+            window.location.href = safariUrl;
+          } else if (isAndroid) {
+            // Use intent URL for better Android compatibility
+            // Format: intent://host/path#Intent;scheme=scheme;package=package;end
+            const intentPath =
+              path && path !== "/" && path !== "/index.html" ? path : "";
+            const intentParams = [];
 
-            // Android에서 Intent로 브라우저 선택 다이얼로그 열기
-            if (/Android/.test(navigator.userAgent)) {
-              const intentUrl = `intent://${currentUrl.replace(
-                /^https?:\/\//,
-                ""
-              )}#Intent;scheme=https;action=android.intent.action.VIEW;end`;
-              window.location.href = intentUrl;
-            }
-            // iOS에서 Safari로 열기 시도
-            else if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-              const safariUrl = `x-web-search://?${encodeURIComponent(
-                currentUrl
-              )}`;
-              window.location.href = safariUrl;
-
-              // Safari 스킴이 안되면 일반 브라우저로 열기
-              setTimeout(() => {
-                window.open(currentUrl, "_blank");
-              }, 2000);
-            }
-            // 기타 플랫폼
-            else {
-              window.open(currentUrl, "_blank");
+            // Add URL parameters to intent
+            for (const [key, value] of urlParams.entries()) {
+              intentParams.push(`${key}=${value}`);
             }
 
-            setTimeout(() => {
-              storeLinks.style.display = "block";
-            }, 2000);
-          };
-        } else {
-          openAppBtn.onclick = function () {
-            attemptOpenApp();
-            setTimeout(() => {
-              storeLinks.style.display = "block";
-            }, 3000);
-          };
+            const intentParamString =
+              intentParams.length > 0 ? `?${intentParams.join("&")}` : "";
+            const intentUrl = `intent://${intentPath.substring(
+              1
+            )}${intentParamString}#Intent;scheme=cashmallow;package=com.cashmallow.client.traveler;end`;
+            window.location.href = intentUrl;
+          } else {
+            // Fallback for other platforms
+            window.location.href = deepLinkUrl;
+          }
 
-          // 0.5초 후 자동으로 앱 열기 시도
-          setTimeout(() => {
-            attemptOpenApp();
-            setTimeout(() => {
-              storeLinks.style.display = "block";
-            }, 3000);
-          }, 500);
+          // If the app doesn't open within the timeout, show store links
+          setTimeout(function () {
+            if (Date.now() - now < config.timeout + 100) {
+              document.getElementById("storeLinks").style.display = "block";
+            }
+          }, config.timeout);
+        } catch (error) {
+          // Handle any errors during the app opening process
+          handleError(error);
         }
       }
 
-      // 페이지 로드시 초기화
+      // Handle errors and provide fallback
+      function handleError(error) {
+        console.error("Error in app redirect:", error);
+        // Show store links as fallback
+        document.getElementById("storeLinks").style.display = "block";
+        // Update description to inform user
+        document.getElementById("description").textContent =
+          "Something went wrong. Please try downloading the app directly.";
+      }
+
+      // Initialize page
+      function initPage() {
+        try {
+          const inAppBrowser = isInAppBrowser();
+          const title = document.getElementById("title");
+          const description = document.getElementById("description");
+          const openAppBtn = document.getElementById("openAppBtn");
+          const storeLinks = document.getElementById("storeLinks");
+          const appStoreLink = document.getElementById("appStoreLink");
+          const playStoreLink = document.getElementById("playStoreLink");
+
+          // Set store links
+          appStoreLink.href = config.appStore;
+          playStoreLink.href = config.playStore;
+
+          // Handle in-app browsers differently
+          if (inAppBrowser) {
+            let browserName = "";
+            switch (inAppBrowser) {
+              case "kakaotalk":
+                browserName = "KakaoTalk";
+                break;
+              case "line":
+                browserName = "Line";
+                break;
+              case "naver":
+                browserName = "Naver";
+                break;
+              case "facebook":
+                browserName = "Facebook";
+                break;
+              case "instagram":
+                browserName = "Instagram";
+                break;
+              default:
+                browserName = "In-app";
+                break;
+            }
+
+            title.textContent = `Redirecting to the app from browser`;
+            description.innerHTML =
+              "If the app doesn't open automatically, click here.";
+
+            openAppBtn.textContent = "Open in External Browser";
+            openAppBtn.onclick = function () {
+              const currentUrl = window.location.href;
+
+              // Open browser selection dialog with Intent on Android
+              if (isAndroid) {
+                const intentUrl = `intent://${currentUrl.replace(
+                  /^https?:\/\//,
+                  ""
+                )}#Intent;scheme=https;action=android.intent.action.VIEW;end`;
+                window.location.href = intentUrl;
+              }
+              // Try to open in Safari on iOS
+              else if (isIOS) {
+                const safariUrl = `x-web-search://?${encodeURIComponent(
+                  currentUrl
+                )}`;
+                window.location.href = safariUrl;
+
+                // If Safari scheme fails, open in regular browser
+                setTimeout(() => {
+                  window.open(currentUrl, "_blank");
+                }, 2000);
+              }
+              // Other platforms
+              else {
+                window.open(currentUrl, "_blank");
+              }
+
+              setTimeout(() => {
+                storeLinks.style.display = "block";
+              }, 2000);
+            };
+          } else {
+            // Regular browser - try to open app directly
+            openAppBtn.textContent = "Open Cashmallow App";
+            openAppBtn.onclick = function () {
+              attemptOpenApp();
+            };
+
+            // Auto-attempt to open app after a short delay
+            setTimeout(() => {
+              attemptOpenApp();
+            }, 500);
+          }
+        } catch (error) {
+          // Handle any errors that occur during initialization
+          handleError(error);
+        }
+      }
+
+      // Initialize when page loads
       window.addEventListener("load", initPage);
     </script>
   </body>
